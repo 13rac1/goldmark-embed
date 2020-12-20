@@ -11,7 +11,7 @@ import (
 func TestMeta(t *testing.T) {
 	markdown := goldmark.New(
 		goldmark.WithExtensions(
-			embed.Embed,
+			embed.New(),
 		),
 	)
 	source := `# Hello goldmark-embed
