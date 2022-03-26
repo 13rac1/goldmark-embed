@@ -37,7 +37,7 @@ go get github.com/13rac1/goldmark-embed
 ```go
   markdown := goldmark.New(
     goldmark.WithExtensions(
-      embed.Embed,
+      embed.New(),
     ),
   )
   var buf bytes.Buffer
