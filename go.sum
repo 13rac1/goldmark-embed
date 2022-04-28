@@ -1,5 +1,2 @@
-github.com/13rac1/goldmark-embed v0.0.0-20201220231550-e6806f2de66a h1:97tpPJ82VuexbkbPLIzF4BrPy/4XalKF1CKyMFc1fs0=
-github.com/13rac1/goldmark-embed v0.0.0-20201220231550-e6806f2de66a/go.mod h1:dxt3ggQZ3euHiXGfETfZPfA5OUpKgJn1s4vS+YT1MEU=
-github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.4.12 h1:6hffw6vALvEDqJ19dOJvJKOoAOKe4NDaTqvd2sktGN0=
 github.com/yuin/goldmark v1.4.12/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
