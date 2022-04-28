@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	embed "github.com/13rac1/goldmark-embed"
+	embed "github.com/PaperPrototype/goldmark-embed"
 	"github.com/yuin/goldmark"
 )
 
