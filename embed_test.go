@@ -39,7 +39,7 @@ func TestMeta(t *testing.T) {
 		panic(err2)
 	}
 	if buf2.String() != `<h1>Hello goldmark-embed for Vimeo</h1>
-<p><iframe src="https://player.vimeo.com/video/148751763?&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" width="724" height="404" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="pygame_falling_gravity_faster"></iframe></p>
+<p><iframe src="https://player.vimeo.com/video/148751763?&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" width="724" height="404" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></p>
 ` {
 		t.Error("Invalid HTML output for Vimeo")
 		t.Log(buf2.String())

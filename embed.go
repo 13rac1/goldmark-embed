@@ -120,6 +120,6 @@ func (r *HTMLRenderer) renderVimeoVideo(w util.BufWriter, source []byte, node as
 
 	vimeo := node.(*Vimeo)
 
-	w.Write([]byte(`<iframe src="https://player.vimeo.com/video/` + vimeo.Video + `?&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" width="724" height="404" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="pygame_falling_gravity_faster"></iframe>`))
+	w.Write([]byte(`<iframe src="https://player.vimeo.com/video/` + vimeo.Video + `?&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" width="724" height="404" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`))
 	return ast.WalkContinue, nil
 }
