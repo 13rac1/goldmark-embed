@@ -1,5 +1,5 @@
-module github.com/13rac1/goldmark-embed
+module github.com/PaperPrototype/goldmark-embed
 
-go 1.14
+go 1.17
 
-require github.com/yuin/goldmark v1.2.1
+require github.com/yuin/goldmark v1.4.12

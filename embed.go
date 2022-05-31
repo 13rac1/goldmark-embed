@@ -39,32 +39,6 @@ func (e *embedExtension) Extend(m goldmark.Markdown) {
 	)
 }
 
-// YouTube struct represents a YouTube Video embed of the Markdown text.
-type YouTube struct {
-	ast.Image
-	Video string
-}
-
-// KindYouTube is a NodeKind of the YouTube node.
-var KindYouTube = ast.NewNodeKind("YouTube")
-
-// Kind implements Node.Kind.
-func (n *YouTube) Kind() ast.NodeKind {
-	return KindYouTube
-}
-
-// NewYouTube returns a new YouTube node.
-func NewYouTube(img *ast.Image, v string) *YouTube {
-	c := &YouTube{
-		Image: *img,
-		Video: v,
-	}
-	c.Destination = img.Destination
-	c.Title = img.Title
-
-	return c
-}
-
 type astTransformer struct{}
 
 var defaultASTTransformer = &astTransformer{}
@@ -79,6 +53,7 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 		}
 
 		img := n.(*ast.Image)
+		// parse the url
 		u, err := url.Parse(string(img.Destination))
 		if err != nil {
 			msg := ast.NewString([]byte(fmt.Sprintf("<!-- %s -->", err)))
@@ -87,15 +62,24 @@ func (a *astTransformer) Transform(node *ast.Document, reader text.Reader, pc pa
 			return ast.WalkContinue, nil
 		}
 
-		if u.Host != "www.youtube.com" || u.Path != "/watch" {
-			return ast.WalkContinue, nil
+		if u.Host == "www.youtube.com" && u.Path == "/watch" {
+			// if YouTube
+
+			v := u.Query().Get("v")
+			if v == "" {
+				return ast.WalkContinue, nil
+			}
+			youtube := NewYouTube(img, v)
+			n.Parent().ReplaceChild(n.Parent(), n, youtube)
+
+		} else if u.Host == "vimeo.com" {
+			// if Vimeo
+
+			// remove the '/' from url
+			path := u.Path[1:]
+			vimeo := NewVimeo(img, path)
+			n.Parent().ReplaceChild(n.Parent(), n, vimeo)
 		}
-		v := u.Query().Get("v")
-		if v == "" {
-			return ast.WalkContinue, nil
-		}
-		yt := NewYouTube(img, v)
-		n.Parent().ReplaceChild(n.Parent(), n, yt)
 
 		return ast.WalkContinue, nil
 	}
@@ -115,6 +99,7 @@ func NewHTMLRenderer() renderer.NodeRenderer {
 // RegisterFuncs implements NodeRenderer.RegisterFuncs.
 func (r *HTMLRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
 	reg.Register(KindYouTube, r.renderYouTubeVideo)
+	reg.Register(KindVimeo, r.renderVimeoVideo)
 }
 
 func (r *HTMLRenderer) renderYouTubeVideo(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
@@ -122,8 +107,19 @@ func (r *HTMLRenderer) renderYouTubeVideo(w util.BufWriter, source []byte, node 
 		return ast.WalkContinue, nil
 	}
 
-	yt := node.(*YouTube)
+	youtube := node.(*YouTube)
 
-	w.Write([]byte(`<iframe width="560" height="315" src="https://www.youtube.com/embed/` + yt.Video + `" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`))
+	w.Write([]byte(`<iframe width="560" height="315" src="https://www.youtube.com/embed/` + youtube.Video + `" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`))
+	return ast.WalkContinue, nil
+}
+
+func (r *HTMLRenderer) renderVimeoVideo(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
+	if entering {
+		return ast.WalkContinue, nil
+	}
+
+	vimeo := node.(*Vimeo)
+
+	w.Write([]byte(`<iframe src="https://player.vimeo.com/video/` + vimeo.Video + `?&amp;badge=0&amp;autopause=0&amp;player_id=0" width="724" height="404" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`))
 	return ast.WalkContinue, nil
 }

@@ -1,35 +1,39 @@
 # goldmark-embed
 
-goldmark-embed is an extension for the [goldmark][goldmark] library that extends
+goldmark-embed is based on 13rac1's extension for the [goldmark][goldmark] library that extends
 the Markdown `![]()` image embed syntax to support additional media formats.
 
 [goldmark]: http://github.com/yuin/goldmark
 
-YouTube only at first.
+Supports YouTube and Vimeo links.
 
 ## Demo
 
 This markdown:
 
 ```md
-# Hello goldmark-embed
+# Hello goldmark-embed for YouTube
 
 ![](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+
+# Hello goldmark-embed for Vimeo
+
+![](https://vimeo.com/148751763)
 ```
 
 Becomes this HTML:
 
 ```html
-<h1>Hello goldmark-embed</h1>
-<p><iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0"
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-allowfullscreen></iframe></p>
+<h1>Hello goldmark-embed for Youtube</h1>
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
+<h1>Hello goldmark-embed for Vimeo</h1>
+<p><iframe src="https://player.vimeo.com/video/148751763?&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" width="724" height="404" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></p>
 ```
 
 ### Installation
 
 ```bash
-go get github.com/13rac1/goldmark-embed
+go get github.com/PaperPrototype/goldmark-embed
 ```
 
 ## Usage
@@ -37,13 +41,15 @@ go get github.com/13rac1/goldmark-embed
 ```go
   markdown := goldmark.New(
     goldmark.WithExtensions(
-      embed.Embed,
+      embed.New(),
     ),
   )
   var buf bytes.Buffer
   if err := markdown.Convert([]byte(source), &buf); err != nil {
     panic(err)
   }
+  
+  // output html
   fmt.Print(buf)
 }
 ```
@@ -57,6 +63,7 @@ go get github.com/13rac1/goldmark-embed
 
 MIT
 
-## Author
+## Authors
 
-Brad Erickson
+![Brad Erickson](https://github.com/13rac1)
+![Abdiel Lopez](https://github.com/PaperPrototype)
